@@ -1,0 +1,184 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Navbar from '@/components/Navbar';
+import { useCartStore } from '@/lib/store';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { ShoppingBag, Heart, Share2, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
+
+import { fetchProduct } from '@/lib/api';
+import { MappedProduct } from '@/lib/types';
+
+const ProductDetailPage = ({ params }: { params: { id: string } }) => {
+  const [product, setProduct] = useState<MappedProduct | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedSize, setSelectedSize] = useState('M');
+  const [activeImage, setActiveImage] = useState(0);
+  const addItem = useCartStore((state) => state.addItem);
+  const { theme } = useTheme();
+  
+  useEffect(() => {
+    const loadProduct = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchProduct(parseInt(params.id));
+        // Map backend fields to frontend props
+        // Backend returns: id, name, description, price, image_url, category, images (list of urls)
+        const mappedProduct = {
+          ...data,
+          images: data.images && data.images.length > 0 ? data.images : [data.image_url],
+          sizes: ["S", "M", "L", "XL"] // Default sizes since backend doesn't provide them
+        };
+        setProduct(mappedProduct);
+      } catch (error) {
+        console.error("Failed to load product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProduct();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-background pt-32">
+        <Navbar />
+        <div className="flex justify-center items-center h-[60vh]">
+          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+        </div>
+      </main>
+    );
+  }
+
+  if (!product) {
+    return (
+      <main className="min-h-screen bg-background pt-32">
+        <Navbar />
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-4xl font-bold uppercase">Product Not Found</h1>
+          <Button asChild className="mt-8">
+            <Link href="/shop">Back to Shop</Link>
+          </Button>
+        </div>
+      </main>
+    );
+  }
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.images[0],
+      size: selectedSize
+    });
+  };
+
+  return (
+    <main className="min-h-screen bg-background text-foreground pt-32 pb-24 transition-colors duration-500">
+      <Navbar />
+      <div className="container mx-auto px-6">
+        <Link href="/shop" className="inline-flex items-center text-[10px] uppercase tracking-[0.3em] font-bold opacity-40 hover:opacity-100 mb-12 transition-all">
+          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Spectrum
+        </Link>
+        
+        <div className="grid lg:grid-cols-2 gap-20">
+          {/* Image Gallery */}
+          <div className="space-y-6">
+            <motion.div 
+              key={theme + activeImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="aspect-[3/4] bg-accent/5 overflow-hidden relative shadow-2xl"
+            >
+              <img src={product.images[activeImage]} alt={product.name} className="w-full h-full object-cover" />
+              <Badge className="absolute top-6 left-6 bg-primary text-primary-foreground rounded-none uppercase text-[10px] tracking-widest px-4 py-2 border-none">
+                {theme === 'luxury' ? 'Premium' : theme === 'streetwear' ? 'Drop 01' : 'Handmade'}
+              </Badge>
+            </motion.div>
+            <div className="grid grid-cols-4 gap-6">
+              {product.images.map((img, idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => setActiveImage(idx)}
+                  className={`aspect-square bg-accent/5 overflow-hidden border-2 transition-all duration-300 ${activeImage === idx ? 'border-primary' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                >
+                  <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Product Info */}
+          <div className="flex flex-col py-4">
+            <span className="text-[10px] uppercase tracking-[0.5em] opacity-40 mb-4 font-bold">{product.category}</span>
+            <h1 className={`text-5xl md:text-7xl font-bold uppercase tracking-tighter mb-6 leading-none ${theme === 'boutique' ? 'font-serif normal-case' : ''}`}>
+              {product.name}
+            </h1>
+            <p className="text-3xl font-bold mb-10 tracking-tight opacity-90">${product.price.toFixed(2)}</p>
+            
+            <Separator className="mb-10 opacity-10" />
+            
+            <div className="space-y-12 mb-16">
+              <div>
+                <h3 className="text-[10px] uppercase tracking-[0.3em] font-bold mb-6 opacity-40">The Narrative</h3>
+                <p className="opacity-70 leading-relaxed max-w-lg text-lg font-light">{product.description}</p>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-[10px] uppercase tracking-[0.3em] font-bold opacity-40">Select Proportions</h3>
+                  <button className="text-[8px] uppercase tracking-[0.3em] font-bold border-b border-foreground/20 pb-1 opacity-40 hover:opacity-100 transition-all">Dimension Guide</button>
+                </div>
+                <div className="flex gap-4">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`w-14 h-14 flex items-center justify-center text-xs font-bold transition-all duration-300 border-2 ${
+                        selectedSize === size ? 'bg-primary text-primary-foreground border-primary' : 'border-border opacity-60 hover:border-foreground hover:opacity-100'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-6 mt-auto">
+              <Button 
+                onClick={handleAddToCart}
+                className="flex-1 bg-primary text-primary-foreground py-10 rounded-none uppercase tracking-[0.3em] font-bold flex items-center justify-center gap-4 transition-all hover:opacity-90 active:scale-95 shadow-xl"
+              >
+                <ShoppingBag className="w-5 h-5" /> Add to Order
+              </Button>
+              <Button variant="outline" className="w-20 h-20 rounded-none border-2 border-border hover:border-primary transition-all">
+                <Heart className="w-6 h-6" />
+              </Button>
+            </div>
+            
+            <div className="mt-16 grid grid-cols-2 gap-12 py-10 border-t border-border/50">
+              <div>
+                <h4 className="text-[8px] font-bold uppercase tracking-[0.3em] mb-3 opacity-40">Logistics</h4>
+                <p className="text-[10px] opacity-60 leading-relaxed uppercase tracking-widest">Global express shipping. Carbon neutral transit.</p>
+              </div>
+              <div>
+                <h4 className="text-[8px] font-bold uppercase tracking-[0.3em] mb-3 opacity-40">Resolution</h4>
+                <p className="text-[10px] opacity-60 leading-relaxed uppercase tracking-widest">30-day architectural return policy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default ProductDetailPage;

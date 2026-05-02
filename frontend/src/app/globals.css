@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --radius-theme: var(--radius);
+  
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-playfair);
+  --font-mono: var(--font-geist-mono);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+}
+
+/* --- Theme 1: Minimal Luxury (Zara Style) --- */
+:root, [data-theme="luxury"] {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --accent: #71717a;
+  --accent-foreground: #ffffff;
+  --border: #e4e4e7;
+  --radius: 0rem;
+  --font-main: var(--font-geist-sans);
+}
+
+/* --- Theme 2: Streetwear (Bold & Edgy) --- */
+[data-theme="streetwear"] {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --primary: #00ff00; /* Neon Green */
+  --primary-foreground: #000000;
+  --accent: #ff00ff; /* Neon Pink */
+  --accent-foreground: #ffffff;
+  --border: #27272a;
+  --radius: 0.25rem;
+  --font-main: var(--font-geist-sans);
+}
+
+/* --- Theme 3: Premium Boutique (Soft & Elegant) --- */
+[data-theme="boutique"] {
+  --background: #fdfbf7;
+  --foreground: #2d241e;
+  --primary: #d4af37; /* Soft Gold */
+  --primary-foreground: #ffffff;
+  --accent: #8b735b;
+  --accent-foreground: #ffffff;
+  --border: #e8e2d9;
+  --radius: 1.5rem;
+  --font-main: var(--font-serif);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    border-radius: var(--radius-theme);
+    font-family: var(--font-main);
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-500;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--accent); }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
