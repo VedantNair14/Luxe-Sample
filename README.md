@@ -1,6 +1,6 @@
 # Luxe Clothing E-Commerce Template
 
-A "top 0.01%" premium clothing e-commerce website template built with Next.js 15, FastAPI, and Tailwind CSS.
+A top premium clothing e-commerce website template built with Next.js 15, FastAPI, and Tailwind CSS.
 
 ## ✨ Features
 
