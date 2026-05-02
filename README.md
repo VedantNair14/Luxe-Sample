@@ -65,4 +65,4 @@ A "top 0.01%" premium clothing e-commerce website template built with Next.js 15
 The design follows a "Less is More" approach, inspired by high-end fashion houses. It uses bold typography, generous whitespace, and subtle micro-interactions to create a feeling of exclusivity and luxury.
 
 ---
-Created by Antigravity - Senior Full-Stack Developer & Product Strategist.
+Created by Vedant Nair- Python Full-Stack Developer.
