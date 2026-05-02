@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const CartPage = () => {
@@ -14,21 +15,23 @@ const CartPage = () => {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-white pt-32">
+      <main className="min-h-screen bg-background pt-32 text-foreground transition-colors duration-500">
         <Navbar />
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold uppercase mb-8">Your Cart is Empty</h1>
-          <p className="text-neutral-500 mb-12">Looks like you haven&apos;t added anything to your cart yet.</p>
-          <Button asChild className="bg-black text-white px-12 py-6 rounded-none uppercase tracking-widest">
-            <Link href="/shop">Start Shopping</Link>
-          </Button>
+          <Link 
+            href="/shop" 
+            className="inline-flex items-center justify-center bg-primary text-primary-foreground px-12 py-6 rounded-none uppercase tracking-widest text-sm font-medium hover:opacity-90 transition-all"
+          >
+            Start Shopping
+          </Link>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-24">
+    <main className="min-h-screen bg-background text-foreground pt-32 pb-24 transition-colors duration-500">
       <Navbar />
       <div className="container mx-auto px-6">
         <h1 className="text-4xl font-bold uppercase mb-12 tracking-tighter">Your Shopping Cart</h1>
@@ -44,8 +47,8 @@ const CartPage = () => {
                 exit={{ opacity: 0 }}
                 className="flex gap-6 pb-8 border-b border-neutral-100"
               >
-                <div className="w-32 h-40 bg-neutral-100 overflow-hidden">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                <div className="w-32 h-40 bg-neutral-100 overflow-hidden relative">
+                  <Image src={item.image} alt={item.name} fill className="object-cover" />
                 </div>
                 <div className="flex-1 flex flex-col justify-between py-2">
                   <div className="flex justify-between items-start">
@@ -85,7 +88,7 @@ const CartPage = () => {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="bg-neutral-50 p-8 sticky top-32">
+            <div className="bg-accent/5 p-8 sticky top-32 border border-border">
               <h2 className="text-xl font-bold uppercase mb-8 tracking-tight">Order Summary</h2>
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between text-sm text-neutral-500">
@@ -102,8 +105,8 @@ const CartPage = () => {
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
-              <Button className="w-full bg-black text-white py-8 rounded-none uppercase tracking-widest flex items-center justify-center gap-2 group">
-                Checkout <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <Button className="w-full bg-primary text-primary-foreground py-10 rounded-none uppercase tracking-[0.2em] font-black flex items-center justify-center gap-4 group transition-all hover:opacity-90 active:scale-95 shadow-xl">
+                Checkout <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <div className="mt-8 flex items-center justify-center gap-4 opacity-50 grayscale">
                 {/* Payment Icons Placeholder */}

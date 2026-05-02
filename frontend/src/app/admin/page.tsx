@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Package, 
@@ -21,7 +20,7 @@ import { Input } from '@/components/ui/input';
 
 const AdminDashboard = () => {
   return (
-    <div className="flex min-h-screen bg-neutral-100">
+    <div className="flex min-h-screen bg-background text-foreground transition-colors duration-500">
       {/* Sidebar */}
       <aside className="w-64 bg-black text-white p-8 flex flex-col hidden md:flex">
         <h2 className="text-2xl font-bold uppercase tracking-tighter mb-12">Luxe Admin</h2>
@@ -56,11 +55,11 @@ const AdminDashboard = () => {
           </div>
           <div className="flex gap-4">
             <div className="relative">
-              <Input placeholder="Search..." className="bg-white border-none rounded-none w-64 pl-10 text-xs uppercase tracking-widest h-12" />
+              <Input placeholder="SEARCH..." className="bg-accent/5 border-border rounded-none w-64 pl-10 text-[10px] uppercase tracking-widest h-12 focus:ring-1 focus:ring-primary" />
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
             </div>
-            <Button className="bg-black text-white rounded-none uppercase tracking-widest px-6 h-12 flex gap-2">
-              <Plus className="w-4 h-4" /> Add Product
+            <Button className="bg-primary text-primary-foreground rounded-none uppercase tracking-[0.2em] px-8 h-12 flex gap-3 font-bold transition-all hover:opacity-90 active:scale-95 shadow-lg">
+              <Plus className="w-4 h-4" /> Add Silhouette
             </Button>
           </div>
         </header>
@@ -73,8 +72,8 @@ const AdminDashboard = () => {
             { label: 'New Customers', value: '1,240', change: '+18%', color: 'text-green-500' },
             { label: 'Total Products', value: '156', change: '0', color: 'text-neutral-400' },
           ].map((stat, i) => (
-            <Card key={i} className="rounded-none border-none shadow-sm">
-              <CardContent className="p-6">
+            <Card key={i} className="rounded-none border border-border/50 bg-accent/5 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-8">
                 <p className="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">{stat.label}</p>
                 <div className="flex justify-between items-end">
                   <h3 className="text-2xl font-bold tracking-tight">{stat.value}</h3>
@@ -86,7 +85,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Recent Orders Table */}
-        <Card className="rounded-none border-none shadow-sm overflow-hidden">
+        <Card className="rounded-none border border-border/50 bg-accent/5 shadow-sm overflow-hidden">
           <CardHeader className="p-8 border-b border-neutral-100 flex flex-row justify-between items-center">
             <CardTitle className="text-sm font-bold uppercase tracking-widest">Recent Orders</CardTitle>
             <Button variant="ghost" className="text-[10px] uppercase tracking-widest p-0">View All <ChevronRight className="w-3 h-3 ml-1" /></Button>
@@ -94,7 +93,7 @@ const AdminDashboard = () => {
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-neutral-50 text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-400">
+                <thead className="bg-accent/10 text-[10px] uppercase tracking-[0.3em] font-black text-foreground/60">
                   <tr>
                     <th className="px-8 py-4">Order ID</th>
                     <th className="px-8 py-4">Customer</th>
@@ -107,7 +106,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody className="divide-y divide-neutral-100">
                   {[1, 2, 3, 4, 5].map((order) => (
-                    <tr key={order} className="hover:bg-neutral-50 transition-colors">
+                    <tr key={order} className="hover:bg-accent/5 transition-colors border-b border-border/50">
                       <td className="px-8 py-6 text-sm font-bold">#ORD-{1000 + order}</td>
                       <td className="px-8 py-6">
                         <div className="flex flex-col">

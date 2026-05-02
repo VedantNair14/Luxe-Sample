@@ -6,20 +6,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
+import Image from 'next/image';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <main className="min-h-screen bg-neutral-50 flex items-center justify-center py-24">
+    <main className="min-h-screen bg-background text-foreground flex items-center justify-center py-24 transition-colors duration-500">
       <Navbar />
       <div className="absolute inset-0 z-0 overflow-hidden opacity-10">
-        <img 
+        <Image 
           src="https://images.unsplash.com/photo-1441984966672-9653199659f8?q=80&w=2070" 
           alt="Background" 
-          className="w-full h-full object-cover grayscale"
+          fill
+          className="object-cover grayscale"
+          priority
         />
       </div>
 
@@ -29,7 +31,7 @@ const AuthPage = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md relative z-10 px-6"
       >
-        <Card className="rounded-none border-none shadow-2xl bg-white overflow-hidden">
+        <Card className="rounded-none border-none shadow-2xl bg-accent/5 backdrop-blur-xl overflow-hidden border border-border/50">
           <CardHeader className="pt-12 text-center">
             <CardTitle className="text-3xl font-bold uppercase tracking-tighter mb-2">
               {isLogin ? 'Welcome Back' : 'Create Account'}
@@ -45,7 +47,7 @@ const AuthPage = () => {
                   <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Full Name</label>
                   <Input 
                     placeholder="John Doe" 
-                    className="rounded-none bg-neutral-50 border-none py-6 text-sm"
+                    className="rounded-none bg-accent/10 border-none py-6 text-sm focus:ring-1 focus:ring-primary"
                   />
                 </div>
               )}
@@ -54,14 +56,14 @@ const AuthPage = () => {
                 <Input 
                   type="email" 
                   placeholder="name@company.com" 
-                  className="rounded-none bg-neutral-50 border-none py-6 text-sm"
+                  className="rounded-none bg-accent/10 border-none py-6 text-sm focus:ring-1 focus:ring-primary"
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Password</label>
                   {isLogin && (
-                    <button type="button" className="text-[10px] uppercase tracking-widest text-neutral-400 hover:text-black transition-colors">
+                    <button type="button" className="text-[10px] uppercase tracking-widest text-neutral-400 hover:text-primary transition-colors">
                       Forgot Password?
                     </button>
                   )}
@@ -69,10 +71,10 @@ const AuthPage = () => {
                 <Input 
                   type="password" 
                   placeholder="••••••••" 
-                  className="rounded-none bg-neutral-50 border-none py-6 text-sm"
+                  className="rounded-none bg-accent/10 border-none py-6 text-sm focus:ring-1 focus:ring-primary"
                 />
               </div>
-              <Button className="w-full bg-black text-white py-8 rounded-none uppercase tracking-widest mt-4">
+              <Button className="w-full bg-primary text-primary-foreground py-8 rounded-none uppercase tracking-widest mt-4 font-black transition-all hover:opacity-90 active:scale-95 shadow-xl">
                 {isLogin ? 'Sign In' : 'Sign Up'}
               </Button>
             </form>
@@ -80,7 +82,7 @@ const AuthPage = () => {
           <CardFooter className="pb-12 pt-0 flex flex-col gap-6">
             <div className="relative w-full text-center">
               <Separator className="absolute top-1/2 left-0 -translate-y-1/2" />
-              <span className="relative z-10 bg-white px-4 text-[10px] uppercase tracking-widest text-neutral-400">Or continue with</span>
+              <span className="relative z-10 bg-background px-4 text-[10px] uppercase tracking-widest text-neutral-400">Or continue with</span>
             </div>
             <div className="grid grid-cols-2 gap-4 w-full px-8">
               <Button variant="outline" className="rounded-none border-neutral-200 py-6 uppercase tracking-widest text-[10px]">Google</Button>
@@ -90,7 +92,7 @@ const AuthPage = () => {
               {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
               <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-black font-bold uppercase tracking-widest border-b border-black pb-0.5"
+                className="text-primary font-bold uppercase tracking-widest border-b border-primary pb-0.5"
               >
                 {isLogin ? 'Sign Up' : 'Log In'}
               </button>

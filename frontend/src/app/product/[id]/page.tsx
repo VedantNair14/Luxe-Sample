@@ -1,20 +1,22 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Navbar from '@/components/Navbar';
 import { useCartStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingBag, Heart, Share2, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, Heart, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
 import { fetchProduct } from '@/lib/api';
 import { MappedProduct } from '@/lib/types';
 
-const ProductDetailPage = ({ params }: { params: { id: string } }) => {
+const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = use(params);
   const [product, setProduct] = useState<MappedProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState('M');
@@ -26,11 +28,13 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
     const loadProduct = async () => {
       setLoading(true);
       try {
-        const data = await fetchProduct(parseInt(params.id));
+        const data = await fetchProduct(parseInt(id));
         // Map backend fields to frontend props
         // Backend returns: id, name, description, price, image_url, category, images (list of urls)
-        const mappedProduct = {
+        const mappedProduct: MappedProduct = {
           ...data,
+          image: data.image_url,
+          isNew: data.is_featured,
           images: data.images && data.images.length > 0 ? data.images : [data.image_url],
           sizes: ["S", "M", "L", "XL"] // Default sizes since backend doesn't provide them
         };
@@ -42,7 +46,7 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
       }
     };
     loadProduct();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -61,9 +65,12 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
         <Navbar />
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold uppercase">Product Not Found</h1>
-          <Button asChild className="mt-8">
-            <Link href="/shop">Back to Shop</Link>
-          </Button>
+          <Link 
+            href="/shop"
+            className="inline-flex items-center justify-center bg-primary text-primary-foreground px-6 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors mt-8"
+          >
+            Back to Shop
+          </Link>
         </div>
       </main>
     );
@@ -97,7 +104,13 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
               animate={{ opacity: 1 }}
               className="aspect-[3/4] bg-accent/5 overflow-hidden relative shadow-2xl"
             >
-              <img src={product.images[activeImage]} alt={product.name} className="w-full h-full object-cover" />
+              <Image 
+                src={product.images[activeImage]} 
+                alt={product.name} 
+                fill 
+                className="object-cover"
+                priority
+              />
               <Badge className="absolute top-6 left-6 bg-primary text-primary-foreground rounded-none uppercase text-[10px] tracking-widest px-4 py-2 border-none">
                 {theme === 'luxury' ? 'Premium' : theme === 'streetwear' ? 'Drop 01' : 'Handmade'}
               </Badge>
@@ -107,9 +120,14 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
                 <button 
                   key={idx}
                   onClick={() => setActiveImage(idx)}
-                  className={`aspect-square bg-accent/5 overflow-hidden border-2 transition-all duration-300 ${activeImage === idx ? 'border-primary' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                  className={`aspect-square bg-accent/5 overflow-hidden border-2 transition-all duration-300 relative ${activeImage === idx ? 'border-primary' : 'border-transparent opacity-50 hover:opacity-100'}`}
                 >
-                  <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
+                  <Image 
+                    src={img} 
+                    alt={`${product.name} ${idx}`} 
+                    fill 
+                    className="object-cover" 
+                  />
                 </button>
               ))}
             </div>

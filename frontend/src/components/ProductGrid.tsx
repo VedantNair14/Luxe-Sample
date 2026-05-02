@@ -15,11 +15,12 @@ const ProductGrid = ({ title }: { title: string }) => {
       setLoading(true);
       try {
         const data = await fetchProducts(undefined, true);
-        const mappedData = data.map((p: Product) => ({
+        const mappedData: MappedProduct[] = data.map((p: Product) => ({
           ...p,
           image: p.image_url,
           isNew: p.is_featured,
-          sizes: ["S", "M", "L", "XL"]
+          sizes: ["S", "M", "L", "XL"],
+          images: p.images && p.images.length > 0 ? p.images : [p.image_url]
         }));
         setProducts(mappedData);
       } catch (error) {

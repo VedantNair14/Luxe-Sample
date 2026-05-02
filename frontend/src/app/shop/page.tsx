@@ -5,8 +5,7 @@ import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { Filter, ChevronDown, Grid, List as ListIcon, Search } from 'lucide-react';
+import { ChevronDown, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 import { fetchProducts } from '@/lib/api';
@@ -26,11 +25,12 @@ const ShopPage = () => {
       try {
         const data = await fetchProducts(activeCategory);
         // Map backend fields to frontend props
-        const mappedData = data.map((p: Product) => ({
+        const mappedData: MappedProduct[] = data.map((p: Product) => ({
           ...p,
           image: p.image_url,
           isNew: p.is_featured,
-          sizes: ["S", "M", "L", "XL"]
+          sizes: ["S", "M", "L", "XL"],
+          images: p.images && p.images.length > 0 ? p.images : [p.image_url]
         }));
         setProducts(mappedData);
       } catch (error) {

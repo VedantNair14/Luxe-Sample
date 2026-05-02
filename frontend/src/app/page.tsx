@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ProductGrid from '@/components/ProductGrid';
 import { useTheme } from '@/context/ThemeContext';
+import Image from 'next/image';
 
 export default function Home() {
   const { theme } = useTheme();
@@ -28,11 +29,12 @@ export default function Home() {
               Discover More
             </button>
           </div>
-          <div className="order-1 md:order-2 aspect-[4/5] bg-neutral-200 overflow-hidden shadow-2xl">
-            <img 
+          <div className="order-1 md:order-2 aspect-[4/5] bg-neutral-200 overflow-hidden shadow-2xl relative">
+            <Image 
               src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1000" 
               alt="Brand Story" 
-              className={`w-full h-full object-cover transition-all duration-1000 ${theme === 'luxury' ? 'grayscale hover:grayscale-0' : ''}`}
+              fill
+              className={`object-cover transition-all duration-1000 ${theme === 'luxury' ? 'grayscale hover:grayscale-0' : ''}`}
             />
           </div>
         </div>

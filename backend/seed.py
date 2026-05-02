@@ -41,16 +41,16 @@ def seed():
         ),
         models.Product(
             name="Leather Chelsea Boots",
-            description="Handcrafted Italian leather boots.",
+            description="Handcrafted Italian leather boots with a modern silhouette.",
             price=180.00,
             stock=20,
             category_id=mens.id,
-            image_url="https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=1000",
+            image_url="https://images.unsplash.com/photo-1638247025967-b4e38f787b76?q=80&w=1000",
             is_featured=True
         ),
         models.Product(
             name="Minimalist Gold Watch",
-            description="Sophisticated watch with a minimalist dial.",
+            description="Sophisticated watch with a minimalist dial and premium finish.",
             price=120.00,
             stock=15,
             category_id=accessories.id,

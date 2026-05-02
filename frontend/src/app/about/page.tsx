@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
+import Image from 'next/image';
+
 const AboutPage = () => {
   const { theme } = useTheme();
 
@@ -21,11 +23,12 @@ const AboutPage = () => {
           <h1 className={`text-6xl md:text-8xl font-bold uppercase tracking-tighter mb-12 ${theme === 'boutique' ? 'font-serif normal-case' : ''}`}>
             Beyond the <br /> Threads
           </h1>
-          <div className="aspect-video bg-accent/5 overflow-hidden mb-16 shadow-2xl">
-            <img 
+          <div className="aspect-video bg-accent/5 overflow-hidden mb-16 shadow-2xl relative">
+            <Image 
               src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070" 
               alt="About Luxe" 
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
           <div className="grid md:grid-cols-2 gap-16 text-left">

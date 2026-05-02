@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTheme } from '@/context/ThemeContext';
 
 const Hero = () => {
@@ -30,66 +30,90 @@ const Hero = () => {
     }
   };
 
-  const current = content[theme];
+  const current = content[theme as keyof typeof content];
 
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-background">
-      {/* Background Image */}
+    <section className="relative h-[110vh] w-full flex items-center justify-center overflow-hidden bg-background">
+      {/* Background Image with Cinematic Parallax */}
       <motion.div 
         key={theme}
-        initial={{ opacity: 0, scale: 1.1 }}
-        animate={{ opacity: 0.6, scale: 1 }}
-        transition={{ duration: 1.5 }}
+        initial={{ opacity: 0, scale: 1.2 }}
+        animate={{ opacity: 0.7, scale: 1.05 }}
+        transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
         className="absolute inset-0 z-0"
       >
-        <img
+        <Image
           src={current.image}
           alt={current.title}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/10 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
       </motion.div>
 
       <div className="container mx-auto px-6 relative z-10 text-center">
         <motion.div
           key={theme + "-text"}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-5xl mx-auto"
         >
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-foreground/70 uppercase tracking-[0.3em] text-sm mb-6 block font-bold"
+          <motion.div
+            initial={{ opacity: 0, letterSpacing: "1em" }}
+            animate={{ opacity: 0.6, letterSpacing: "0.4em" }}
+            transition={{ delay: 0.5, duration: 1.2 }}
+            className="text-foreground uppercase text-[10px] mb-8 block font-bold"
           >
             {current.tag}
-          </motion.span>
-          <h1 className={`text-6xl md:text-9xl font-bold text-foreground mb-8 tracking-tighter leading-none uppercase ${theme === 'boutique' ? 'font-serif lowercase' : ''}`}>
+          </motion.div>
+          
+          <h1 className={`text-7xl md:text-[10rem] font-bold text-foreground mb-10 tracking-[1.5rem] leading-none uppercase mix-blend-difference drop-shadow-2xl ${theme === 'boutique' ? 'font-serif lowercase tracking-normal' : ''}`}>
             {current.title}
           </h1>
-          <p className="text-lg md:text-xl text-foreground/80 mb-12 font-light max-w-2xl mx-auto leading-relaxed">
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+            transition={{ delay: 0.8 }}
+            className="text-lg md:text-2xl text-foreground mb-16 font-light max-w-3xl mx-auto leading-relaxed tracking-wide"
+          >
             {current.desc}
-          </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:opacity-90 rounded-none px-12 py-8 text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl">
-              <Link href="/shop">Shop Now</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-foreground text-foreground hover:bg-foreground hover:text-background rounded-none px-12 py-8 text-sm uppercase tracking-widest transition-all">
-              <Link href="/collections">Explore All</Link>
-            </Button>
-          </div>
+          </motion.p>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="flex flex-col md:flex-row items-center justify-center gap-10"
+          >
+            <Link 
+              href="/shop" 
+              className="group relative inline-flex items-center justify-center bg-primary text-primary-foreground px-16 py-10 text-xs uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(0,0,0,0.3)] font-black overflow-hidden"
+            >
+              <span className="relative z-10">Discover Collection</span>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+            </Link>
+            <Link 
+              href="/collections" 
+              className="group inline-flex items-center justify-center border border-foreground/20 text-foreground hover:border-foreground px-16 py-10 text-xs uppercase tracking-[0.4em] transition-all font-bold backdrop-blur-sm"
+            >
+              The Archives
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
 
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-foreground/50 text-xs uppercase tracking-widest animate-bounce"
+        animate={{ opacity: 0.3 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
       >
-        Scroll to discover
+        <span className="text-[8px] uppercase tracking-[0.5em]">Scroll Down</span>
+        <div className="w-[1px] h-16 bg-gradient-to-b from-foreground to-transparent" />
       </motion.div>
     </section>
   );

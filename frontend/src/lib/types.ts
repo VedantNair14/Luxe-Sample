@@ -14,6 +14,7 @@ export interface MappedProduct extends Product {
   image: string;
   isNew: boolean;
   sizes: string[];
+  images: string[];
 }
 
 export interface Category {

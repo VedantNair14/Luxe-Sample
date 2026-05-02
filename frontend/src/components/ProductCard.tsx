@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ShoppingCart, Eye } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -42,11 +42,12 @@ const ProductCard = ({ id, name, price, image, category, isNew }: ProductCardPro
               New
             </Badge>
           )}
-          <Link href={`/product/${id}`}>
-            <img
+          <Link href={`/product/${id}`} className="relative block w-full h-full">
+            <Image
               src={image}
               alt={name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
           </Link>
           
@@ -57,16 +58,12 @@ const ProductCard = ({ id, name, price, image, category, isNew }: ProductCardPro
             >
               Add to Cart
             </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="bg-background border-none hover:bg-primary hover:text-primary-foreground"
-              asChild
+            <Link 
+              href={`/product/${id}`}
+              className="flex items-center justify-center size-8 bg-background border-none hover:bg-primary hover:text-primary-foreground rounded-lg transition-colors"
             >
-              <Link href={`/product/${id}`}>
-                <Eye className="w-4 h-4" />
-              </Link>
-            </Button>
+              <Eye className="w-4 h-4" />
+            </Link>
           </div>
         </div>
         <CardContent className="pt-4 px-0">
