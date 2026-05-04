@@ -23,6 +23,8 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/context/ThemeContext";
+import CustomCursor from "@/components/CustomCursor";
+import PageTransition from "@/components/PageTransition";
 
 export default function RootLayout({
   children,
@@ -32,10 +34,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased cursor-none`}
       >
         <ThemeProvider>
-          {children}
+          <CustomCursor />
+          <PageTransition>
+            {children}
+          </PageTransition>
         </ThemeProvider>
       </body>
     </html>

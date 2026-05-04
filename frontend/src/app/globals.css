@@ -72,16 +72,26 @@
 
 @layer utilities {
   .glass {
-    @apply bg-background/30 backdrop-blur-xl border border-white/10;
+    @apply bg-background/60 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)];
   }
   .glass-dark {
-    @apply bg-black/30 backdrop-blur-xl border border-white/5;
+    @apply bg-black/60 backdrop-blur-2xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
   }
   .text-glow {
     text-shadow: 0 0 20px rgba(var(--primary), 0.3);
   }
   .mask-radial {
     mask-image: radial-gradient(circle, black, transparent 80%);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
   }
 }
 
@@ -117,6 +127,27 @@
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.skew-on-hover {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skew-on-hover:hover {
+  transform: skewX(-5deg) scale(1.02);
 }
 
 .reveal-text {

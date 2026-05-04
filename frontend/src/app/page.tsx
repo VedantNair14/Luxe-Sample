@@ -3,8 +3,10 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ProductGrid from '@/components/ProductGrid';
+import EditorialMarquee from '@/components/EditorialMarquee';
 import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const { theme } = useTheme();
@@ -15,28 +17,45 @@ export default function Home() {
       <Hero />
       <ProductGrid title="Featured Collection" />
       
-      <section className="py-24 bg-accent/5">
-        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-          <div className="order-2 md:order-1">
-            <span className="text-[10px] uppercase tracking-[0.4em] opacity-50 mb-4 block font-bold">Our Story</span>
-            <h2 className={`text-4xl md:text-5xl font-bold uppercase mb-8 leading-tight tracking-tighter ${theme === 'boutique' ? 'font-serif normal-case' : ''}`}>
-              Crafting Excellence <br /> for the Modern Soul
+      <EditorialMarquee text="LUXE COLLECTION 2026 • ESSENTIAL SILHOUETTES • TIMLESS LUXURY • " />
+
+      <section className="py-40 bg-background overflow-hidden">
+        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-32 items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true }}
+            className="order-2 md:order-1"
+          >
+            <span className="text-[10px] uppercase tracking-[0.6em] opacity-40 mb-6 block font-bold">The Philosophy</span>
+            <h2 className={`text-6xl md:text-8xl font-black uppercase mb-12 leading-[0.9] tracking-tighter ${theme === 'boutique' ? 'font-serif normal-case italic' : ''}`}>
+              Crafting <br /> Excellence
             </h2>
-            <p className="opacity-70 mb-10 max-w-md leading-relaxed text-lg font-light">
-              Founded in 2026, Luxe was born from a desire to create garments that transcend trends. We believe in the power of minimalism and the integrity of premium materials.
+            <p className="opacity-60 mb-14 max-w-md leading-loose text-lg font-medium tracking-wide">
+              Founded in 2026, Luxe was born from a desire to create garments that transcend trends. We believe in the power of minimalism and the integrity of premium materials. Each piece is a testament to the art of subtraction.
             </p>
-            <button className="px-10 py-5 border border-foreground uppercase text-xs tracking-[0.2em] font-bold hover:bg-foreground hover:text-background transition-all duration-300">
-              Discover More
+            <button className="group relative px-12 py-6 border border-foreground/20 uppercase text-[10px] tracking-[0.4em] font-bold overflow-hidden transition-all hover:border-foreground">
+              <span className="relative z-10">Read Our Story</span>
+              <div className="absolute inset-0 bg-foreground translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+              <span className="absolute inset-0 z-20 flex items-center justify-center text-background opacity-0 group-hover:opacity-100 transition-opacity duration-500">Read Our Story</span>
             </button>
-          </div>
-          <div className="order-1 md:order-2 aspect-[4/5] bg-neutral-200 overflow-hidden shadow-2xl relative">
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true }}
+            className="order-1 md:order-2 aspect-[4/5] bg-accent/5 overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.2)] relative group"
+          >
             <Image 
               src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1000" 
               alt="Brand Story" 
               fill
-              className={`object-cover transition-all duration-1000 ${theme === 'luxury' ? 'grayscale hover:grayscale-0' : ''}`}
+              className={`object-cover transition-all duration-[2s] group-hover:scale-110 ${theme === 'luxury' ? 'grayscale group-hover:grayscale-0' : ''}`}
             />
-          </div>
+            <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          </motion.div>
         </div>
       </section>
 

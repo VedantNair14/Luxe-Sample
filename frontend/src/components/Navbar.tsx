@@ -4,13 +4,20 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShoppingBag, Search, User, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import ThemeSwitcher from './ThemeSwitcher';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const cartItemsCount = useCartStore((state) => state.items.length);
+  
+  const { scrollYProgress } = useScroll();
+  const scrollProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +33,10 @@ const Navbar = () => {
         isScrolled ? 'glass py-3 border-border shadow-sm' : 'bg-transparent py-5 border-transparent'
       }`}
     >
+      <motion.div 
+        className="absolute top-0 left-0 h-[2px] bg-primary z-[60]"
+        style={{ scaleX: scrollProgress, transformOrigin: "0%" }}
+      />
       <div className="container mx-auto px-6 flex justify-between items-center text-foreground">
         <div className="flex items-center space-x-8">
           <Link href="/" className="text-2xl font-bold tracking-tighter uppercase">
