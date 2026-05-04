@@ -58,3 +58,29 @@ export const useCartStore = create<CartStore>()(
 const calculateTotal = (items: CartItem[]) => {
   return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 };
+
+interface FavoritesStore {
+  favorites: number[];
+  toggleFavorite: (id: number) => void;
+  isFavorite: (id: number) => boolean;
+}
+
+export const useFavoritesStore = create<FavoritesStore>()(
+  persist(
+    (set, get) => ({
+      favorites: [],
+      toggleFavorite: (id) => {
+        const current = get().favorites;
+        if (current.includes(id)) {
+          set({ favorites: current.filter((favId) => favId !== id) });
+        } else {
+          set({ favorites: [...current, id] });
+        }
+      },
+      isFavorite: (id) => get().favorites.includes(id),
+    }),
+    {
+      name: 'favorites-storage',
+    }
+  )
+);

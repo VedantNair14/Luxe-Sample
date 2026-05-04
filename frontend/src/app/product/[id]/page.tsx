@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, use } from 'react';
 import Navbar from '@/components/Navbar';
-import { useCartStore } from '@/lib/store';
+import { useCartStore, useFavoritesStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingBag, Heart, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 import ProductGrid from '@/components/ProductGrid';
 
@@ -23,9 +23,12 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [selectedSize, setSelectedSize] = useState('M');
   const [activeImage, setActiveImage] = useState(0);
   const addItem = useCartStore((state) => state.addItem);
+  const isFavorite = useFavoritesStore((state) => state.isFavorite(parseInt(id)));
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
   const { theme } = useTheme();
   const { scrollY } = useScroll();
   const showStickyBar = useTransform(scrollY, [0, 800], [0, 1]);
+  const stickyBarY = useTransform(showStickyBar, [0, 1], [100, 0]);
   
   useEffect(() => {
     const loadProduct = async () => {
@@ -107,12 +110,11 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
               animate={{ opacity: 1 }}
               className="aspect-[3/4] bg-accent/5 overflow-hidden relative shadow-2xl"
             >
-              <Image 
+              <motion.img 
+                layoutId={`product-image-${product.id}`}
                 src={product.images[activeImage]} 
                 alt={product.name} 
-                fill 
-                className="object-cover"
-                priority
+                className="object-cover absolute inset-0 w-full h-full"
               />
               <Badge className="absolute top-6 left-6 bg-primary text-primary-foreground rounded-none uppercase text-[10px] tracking-widest px-4 py-2 border-none">
                 {theme === 'luxury' ? 'Premium' : theme === 'streetwear' ? 'Drop 01' : 'Handmade'}
@@ -180,8 +182,12 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
               >
                 <ShoppingBag className="w-5 h-5" /> Add to Order
               </Button>
-              <Button variant="outline" className="w-20 h-20 rounded-none border-2 border-border hover:border-primary transition-all">
-                <Heart className="w-6 h-6" />
+              <Button 
+                variant="outline" 
+                onClick={() => toggleFavorite(parseInt(id))}
+                className={`w-20 h-20 rounded-none border-2 transition-all ${isFavorite ? 'border-primary bg-primary/5 text-primary' : 'border-border hover:border-primary'}`}
+              >
+                <Heart className={`w-6 h-6 ${isFavorite ? 'fill-primary' : ''}`} />
               </Button>
             </div>
             
@@ -210,7 +216,7 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
       {/* Sticky Purchase Bar */}
       <motion.div 
-        style={{ opacity: showStickyBar, y: useTransform(showStickyBar, [0, 1], [100, 0]) }}
+        style={{ opacity: showStickyBar, y: stickyBarY }}
         className="fixed bottom-0 left-0 w-full z-40 bg-background/80 backdrop-blur-xl border-t border-border py-4 px-6 md:px-12 flex justify-between items-center hidden md:flex"
       >
         <div className="flex items-center gap-6">

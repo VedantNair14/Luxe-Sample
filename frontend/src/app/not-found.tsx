@@ -22,7 +22,7 @@ export default function NotFound() {
             Lost in the Void
           </h2>
           <p className="opacity-50 text-lg mb-12 max-w-md mx-auto leading-relaxed">
-            The silhouette you're searching for has vanished into the archives.
+            The silhouette you&apos;re searching for has vanished into the archives.
           </p>
           <Link 
             href="/" 

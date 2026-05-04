@@ -1,6 +1,6 @@
 import { Product, Category } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002';
 
 export async function fetchProducts(category?: string, featured?: boolean): Promise<Product[]> {
   const url = new URL(`${API_BASE_URL}/products`);

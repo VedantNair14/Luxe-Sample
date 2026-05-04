@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import SplitText from './ui/SplitText';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -41,13 +42,17 @@ const Hero = () => {
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
       {/* Cinematic Image Slider with Parallax */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" custom={currentSlide}>
         <motion.div 
           key={currentSlide}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 0.8, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, x: 100, scale: 1.1 }}
+          animate={{ opacity: 0.8, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: -100, scale: 0.95 }}
+          transition={{ 
+            opacity: { duration: 1.2, ease: "linear" },
+            x: { duration: 1.5, ease: [0.16, 1, 0.3, 1] },
+            scale: { duration: 2, ease: [0.16, 1, 0.3, 1] }
+          }}
           className="absolute inset-0 z-0"
           style={{ y }}
         >
@@ -60,6 +65,10 @@ const Hero = () => {
             quality={100}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+          
+          {/* Subtle Fabric Grain Overlay */}
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay" 
+               style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/natural-paper.png")' }} />
         </motion.div>
       </AnimatePresence>
 
@@ -72,24 +81,14 @@ const Hero = () => {
           className="max-w-6xl mx-auto flex flex-col items-center"
         >
           <div className="overflow-hidden mb-2">
-            <motion.h1 
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-              className="text-6xl md:text-[8rem] font-black text-white leading-[0.85] tracking-tighter uppercase mix-blend-difference"
-            >
-              {slides[currentSlide].title}
-            </motion.h1>
+            <div className="text-6xl md:text-[8rem] font-black text-white leading-[0.85] tracking-tighter uppercase mix-blend-difference">
+              <SplitText text={slides[currentSlide].title} delay={0.3} stagger={0.04} />
+            </div>
           </div>
           <div className="overflow-hidden mb-8">
-            <motion.h1 
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-              className="text-6xl md:text-[8rem] font-serif italic text-white/90 leading-[0.85] tracking-tight mix-blend-difference ml-12 md:ml-32"
-            >
-              {slides[currentSlide].subtitle}
-            </motion.h1>
+            <div className="text-6xl md:text-[8rem] font-serif italic text-white/90 leading-[0.85] tracking-tight mix-blend-difference ml-12 md:ml-32">
+              <SplitText text={slides[currentSlide].subtitle} delay={0.5} stagger={0.04} />
+            </div>
           </div>
           
           <motion.p 

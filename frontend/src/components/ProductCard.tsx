@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Eye, Plus, Heart } from 'lucide-react';
-import { useCartStore } from '@/lib/store';
+import { Eye, Plus, Heart } from 'lucide-react';
+import { useCartStore, useFavoritesStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/context/ThemeContext';
+
+import { AddToCartButton } from './AddToCartButton';
 
 interface ProductCardProps {
   id: number;
@@ -24,10 +26,10 @@ const ProductCard = ({ id, name, price, image, category, isNew, tag }: ProductCa
   const addItem = useCartStore((state) => state.addItem);
   const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
+  const isFavorite = useFavoritesStore((state) => state.isFavorite(id));
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
     addItem({ id, name, price, quantity: 1, image });
   };
 
@@ -36,10 +38,14 @@ const ProductCard = ({ id, name, price, image, category, isNew, tag }: ProductCa
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className="group relative"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <Card className="border-none bg-transparent overflow-hidden shadow-none rounded-none">
+      <Card className={`border-none bg-transparent overflow-hidden transition-all duration-700 rounded-none ${isHovered ? 'shadow-soft-xl' : 'shadow-none'}`}>
         {/* Cinematic Image Container */}
-        <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100 cursor-none">
+        <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100 cursor-none fabric-ripple">
           {/* Status Badges */}
           <div className="absolute top-6 left-6 z-20 flex flex-col gap-2">
             {isNew && (
@@ -56,10 +62,14 @@ const ProductCard = ({ id, name, price, image, category, isNew, tag }: ProductCa
 
           <Link href={`/product/${id}`} className="block w-full h-full">
             <motion.img
+              layoutId={`product-image-${id}`}
               src={image}
               alt={name}
-              animate={{ scale: isHovered ? 1.08 : 1 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              animate={{ 
+                scale: isHovered ? 1.05 : 1,
+                y: isHovered ? -10 : 0
+              }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
               className="w-full h-full object-cover"
             />
           </Link>
@@ -68,31 +78,31 @@ const ProductCard = ({ id, name, price, image, category, isNew, tag }: ProductCa
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
-            className="absolute inset-0 bg-black/10 backdrop-blur-[2px] transition-all duration-700 flex flex-col items-center justify-center gap-4 pointer-events-none group-hover:pointer-events-auto"
+            className="absolute inset-0 bg-black/5 backdrop-blur-[1px] transition-all duration-700 flex flex-col items-center justify-center gap-4 pointer-events-none group-hover:pointer-events-auto"
           >
-            <div className="flex gap-3 translate-y-8 group-hover:translate-y-0 transition-transform duration-700">
-              <Button
+            <div className="flex flex-col items-center gap-3 translate-y-8 group-hover:translate-y-0 transition-transform duration-700 w-full px-6">
+              <AddToCartButton 
                 onClick={handleAddToCart}
-                className="bg-background text-foreground hover:bg-primary hover:text-primary-foreground rounded-none px-6 py-6 border-none shadow-2xl flex items-center gap-3 transition-all active:scale-95"
-              >
-                <Plus className="w-4 h-4" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Add to Cart</span>
-              </Button>
-              <Link href={`/product/${id}`}>
+                className="w-full shadow-2xl"
+              />
+              <Link href={`/product/${id}`} className="w-full">
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="bg-background/40 border-none backdrop-blur-md hover:bg-background text-foreground rounded-none w-14 h-14"
+                  className="w-full bg-background/40 border-none backdrop-blur-md hover:bg-background text-foreground rounded-none h-14 flex items-center justify-center gap-3"
                 >
                   <Eye className="w-4 h-4" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Quick View</span>
                 </Button>
               </Link>
             </div>
           </motion.div>
 
           {/* Quick Like Action */}
-          <button className="absolute top-6 right-6 z-20 p-3 opacity-0 group-hover:opacity-100 transition-all duration-500 hover:scale-110 active:scale-90">
-            <Heart className="w-5 h-5 text-white drop-shadow-lg" />
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(id); }}
+            className={`absolute top-6 right-6 z-20 p-3 opacity-0 group-hover:opacity-100 transition-all duration-500 hover:scale-110 active:scale-90 ${isFavorite ? 'opacity-100' : ''}`}
+          >
+            <Heart className={`w-5 h-5 drop-shadow-lg transition-colors ${isFavorite ? 'fill-primary text-primary' : 'text-white'}`} />
           </button>
         </div>
 

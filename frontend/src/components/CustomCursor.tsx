@@ -11,6 +11,7 @@ const CustomCursor = () => {
   const cursorY = useSpring(0, { damping: 30, stiffness: 200, mass: 0.5 });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16);

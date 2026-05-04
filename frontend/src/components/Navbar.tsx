@@ -29,15 +29,15 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
-        isScrolled ? 'bg-background/90 backdrop-blur-xl py-4 border-border shadow-sm' : 'bg-transparent py-6 border-transparent mix-blend-difference text-white'
+      className={`fixed top-0 w-full z-50 transition-all duration-700 border-b ${
+        isScrolled ? 'glass py-4 border-border' : 'bg-transparent py-6 border-transparent'
       }`}
     >
       <motion.div 
-        className="absolute top-0 left-0 h-[2px] bg-primary z-[60]"
+        className="absolute bottom-0 left-0 h-[1px] bg-primary/30 z-[60]"
         style={{ scaleX: scrollProgress, transformOrigin: "0%" }}
       />
-      <div className={`container mx-auto px-6 flex justify-between items-center ${isScrolled ? 'text-foreground' : 'text-white'}`}>
+      <div className={`container mx-auto px-6 flex justify-between items-center transition-colors duration-500 ${isScrolled ? 'text-foreground' : 'text-white mix-blend-difference'}`}>
         <div className="flex items-center space-x-12">
           <Link href="/" className="text-3xl font-black tracking-tighter uppercase">
             Luxe
@@ -84,6 +84,7 @@ const Navbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            key="mobile-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
