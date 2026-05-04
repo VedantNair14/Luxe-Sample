@@ -8,8 +8,11 @@ import { Search, LayoutGrid, List, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 import { fetchProducts } from '@/lib/api';
+import { MappedProduct, Product } from '@/lib/types';
 import { ProductSkeleton } from '@/components/FabricSkeleton';
 import { RevealOnScroll } from '@/components/RevealOnScroll';
+
+const CATEGORIES = ["All", "Men", "Women", "Accessories", "Shoes"];
 
 const ShopPage = () => {
   const [activeCategory, setActiveCategory] = useState("All");
