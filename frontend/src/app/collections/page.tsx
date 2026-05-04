@@ -12,21 +12,21 @@ const COLLECTIONS = [
   {
     title: "Urban Essentials",
     tag: "Spring 2026",
-    image: "/images/urban.png",
+    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2560",
     link: "/shop?category=Men",
     desc: "A fusion of architectural precision and street-ready silhouettes."
   },
   {
     title: "Silk & Stone",
     tag: "High Summer",
-    image: "/images/silk.png",
+    image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=2560",
     link: "/shop?category=Women",
     desc: "Fluid textures meeting raw mineral aesthetics."
   },
   {
     title: "Architectural Footwear",
     tag: "Core Line",
-    image: "/images/footwear.png",
+    image: "https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=2560",
     link: "/shop?category=Shoes",
     desc: "Engineered for movement, designed for the avant-garde."
   }
