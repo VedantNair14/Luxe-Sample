@@ -78,16 +78,15 @@ const ProductCard = ({ id, name, price, image, category, isNew, tag }: ProductCa
                 <Plus className="w-4 h-4" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Add to Cart</span>
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="bg-background/40 border-none backdrop-blur-md hover:bg-background text-foreground rounded-none w-14 h-14"
-                asChild
-              >
-                <Link href={`/product/${id}`}>
+              <Link href={`/product/${id}`}>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="bg-background/40 border-none backdrop-blur-md hover:bg-background text-foreground rounded-none w-14 h-14"
+                >
                   <Eye className="w-4 h-4" />
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           </motion.div>
 

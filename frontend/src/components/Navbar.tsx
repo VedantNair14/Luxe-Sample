@@ -30,26 +30,26 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
-        isScrolled ? 'glass py-3 border-border shadow-sm' : 'bg-transparent py-5 border-transparent'
+        isScrolled ? 'bg-background/90 backdrop-blur-xl py-4 border-border shadow-sm' : 'bg-transparent py-6 border-transparent mix-blend-difference text-white'
       }`}
     >
       <motion.div 
         className="absolute top-0 left-0 h-[2px] bg-primary z-[60]"
         style={{ scaleX: scrollProgress, transformOrigin: "0%" }}
       />
-      <div className="container mx-auto px-6 flex justify-between items-center text-foreground">
-        <div className="flex items-center space-x-8">
-          <Link href="/" className="text-2xl font-bold tracking-tighter uppercase">
+      <div className={`container mx-auto px-6 flex justify-between items-center ${isScrolled ? 'text-foreground' : 'text-white'}`}>
+        <div className="flex items-center space-x-12">
+          <Link href="/" className="text-3xl font-black tracking-tighter uppercase">
             Luxe
           </Link>
-          <div className="hidden md:flex space-x-6">
-            <Link href="/shop" className="text-sm font-medium hover:opacity-50 transition-all uppercase tracking-widest">
+          <div className="hidden md:flex space-x-8">
+            <Link href="/shop" className="text-xs font-bold hover:opacity-50 transition-all uppercase tracking-[0.2em]">
               Shop
             </Link>
-            <Link href="/collections" className="text-sm font-medium hover:opacity-50 transition-all uppercase tracking-widest">
+            <Link href="/collections" className="text-xs font-bold hover:opacity-50 transition-all uppercase tracking-[0.2em]">
               Collections
             </Link>
-            <Link href="/about" className="text-sm font-medium hover:opacity-50 transition-all uppercase tracking-widest">
+            <Link href="/about" className="text-xs font-bold hover:opacity-50 transition-all uppercase tracking-[0.2em]">
               About
             </Link>
           </div>

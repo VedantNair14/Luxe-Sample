@@ -9,8 +9,9 @@ import { Badge } from '@/components/ui/badge';
 import { ShoppingBag, Heart, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
+import ProductGrid from '@/components/ProductGrid';
 
 import { fetchProduct } from '@/lib/api';
 import { MappedProduct } from '@/lib/types';
@@ -23,6 +24,8 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [activeImage, setActiveImage] = useState(0);
   const addItem = useCartStore((state) => state.addItem);
   const { theme } = useTheme();
+  const { scrollY } = useScroll();
+  const showStickyBar = useTransform(scrollY, [0, 800], [0, 1]);
   
   useEffect(() => {
     const loadProduct = async () => {
@@ -195,6 +198,52 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
         </div>
       </div>
+
+      {/* Artificial Intelligence Curated Selection */}
+      <div className="mt-40 border-t border-border pt-32">
+        <div className="container mx-auto px-6 mb-16 text-center">
+          <h2 className="text-[10px] uppercase tracking-[0.8em] font-black opacity-40 mb-4">Curated For You</h2>
+          <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Related <span className="text-primary/50 italic font-serif lowercase tracking-normal">Silhouettes</span></h3>
+        </div>
+        <ProductGrid title="More Selections" />
+      </div>
+
+      {/* Sticky Purchase Bar */}
+      <motion.div 
+        style={{ opacity: showStickyBar, y: useTransform(showStickyBar, [0, 1], [100, 0]) }}
+        className="fixed bottom-0 left-0 w-full z-40 bg-background/80 backdrop-blur-xl border-t border-border py-4 px-6 md:px-12 flex justify-between items-center hidden md:flex"
+      >
+        <div className="flex items-center gap-6">
+          <div className="relative w-12 h-16 bg-accent/5">
+            <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-tight">{product.name}</h4>
+            <p className="text-xs font-bold opacity-60">${product.price.toFixed(2)}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="flex gap-2">
+            {product.sizes.map((size) => (
+              <button
+                key={size}
+                onClick={() => setSelectedSize(size)}
+                className={`w-10 h-10 flex items-center justify-center text-[10px] font-bold transition-all duration-300 border ${
+                  selectedSize === size ? 'bg-primary text-primary-foreground border-primary' : 'border-border opacity-60 hover:border-foreground hover:opacity-100'
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+          <Button 
+            onClick={handleAddToCart}
+            className="bg-primary text-primary-foreground px-10 py-6 rounded-none uppercase tracking-[0.2em] font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-2xl"
+          >
+            <ShoppingBag className="w-4 h-4" /> Add
+          </Button>
+        </div>
+      </motion.div>
     </main>
   );
 };

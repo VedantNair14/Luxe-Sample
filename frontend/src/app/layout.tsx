@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 import { ThemeProvider } from "@/context/ThemeContext";
 import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
+import SmoothScroll from "@/components/SmoothScroll";
 
 export default function RootLayout({
   children,
@@ -38,9 +39,11 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <CustomCursor />
-          <PageTransition>
-            {children}
-          </PageTransition>
+          <SmoothScroll>
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

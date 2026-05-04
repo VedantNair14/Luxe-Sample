@@ -1,106 +1,125 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useTheme } from '@/context/ThemeContext';
 
 const Hero = () => {
-  const { theme } = useTheme();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 1000], [0, 400]);
 
-  const content = {
-    luxury: {
-      tag: "New Collection 2026",
-      title: "Elevate Your Essentials",
-      desc: "Discover a curated collection of premium garments designed for the modern individual. Quality meets timeless luxury.",
-      image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070"
+  const slides = [
+    {
+      title: "Redefine",
+      subtitle: "Your Style",
+      desc: "An exploration of minimalist luxury. Crafted for the top 0.01%.",
+      image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2500"
     },
-    streetwear: {
-      tag: "Limited Drop // V2",
-      title: "REDEFINE THE STREETS",
-      desc: "Bold patterns, oversized fits, and uncompromising attitude. The new standard for urban expression.",
-      image: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000"
+    {
+      title: "Timeless",
+      subtitle: "Silhouettes",
+      desc: "Impeccable tailoring meets avant-garde design. A new era of elegance.",
+      image: "https://images.unsplash.com/photo-1445205170230-053b830c6039?q=80&w=2500"
     },
-    boutique: {
-      tag: "Artisanal Elegance",
-      title: "The Poetry of Fabric",
-      desc: "Soft textures, organic dyes, and silhouettes that tell a story. Experience fashion as art.",
-      image: "https://images.unsplash.com/photo-1445205170230-053b830c6039?q=80&w=2070"
+    {
+      title: "Eternal",
+      subtitle: "Aesthetics",
+      desc: "Uncompromising quality. The intersection of art and high fashion.",
+      image: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=2500"
     }
-  };
+  ];
 
-  const current = content[theme as keyof typeof content];
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
   return (
-    <section className="relative h-[110vh] w-full flex items-center justify-center overflow-hidden bg-background">
-      {/* Background Image with Cinematic Parallax */}
-      <motion.div 
-        key={theme}
-        initial={{ opacity: 0, scale: 1.2 }}
-        animate={{ opacity: 0.7, scale: 1.05 }}
-        transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 z-0"
-      >
-        <Image
-          src={current.image}
-          alt={current.title}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/10 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
-      </motion.div>
-
-      <div className="container mx-auto px-6 relative z-10 text-center">
-        <motion.div
-          key={theme + "-text"}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-5xl mx-auto"
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+      {/* Cinematic Image Slider with Parallax */}
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={currentSlide}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 0.8, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 z-0"
+          style={{ y }}
         >
-          <motion.div
-            initial={{ opacity: 0, letterSpacing: "1em" }}
-            animate={{ opacity: 0.6, letterSpacing: "0.4em" }}
-            transition={{ delay: 0.5, duration: 1.2 }}
-            className="text-foreground uppercase text-[10px] mb-8 block font-bold"
-          >
-            {current.tag}
-          </motion.div>
-          
-          <h1 className={`text-7xl md:text-[10rem] font-bold text-foreground mb-10 tracking-[1.5rem] leading-none uppercase mix-blend-difference drop-shadow-2xl ${theme === 'boutique' ? 'font-serif lowercase tracking-normal' : ''}`}>
-            {current.title}
-          </h1>
+          <Image
+            src={slides[currentSlide].image}
+            alt={slides[currentSlide].title}
+            fill
+            className="object-cover"
+            priority
+            quality={100}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+        </motion.div>
+      </AnimatePresence>
+
+      <div className="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center h-full text-center mt-20">
+        <motion.div
+          key={`text-${currentSlide}`}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="max-w-6xl mx-auto flex flex-col items-center"
+        >
+          <div className="overflow-hidden mb-2">
+            <motion.h1 
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+              className="text-6xl md:text-[8rem] font-black text-white leading-[0.85] tracking-tighter uppercase mix-blend-difference"
+            >
+              {slides[currentSlide].title}
+            </motion.h1>
+          </div>
+          <div className="overflow-hidden mb-8">
+            <motion.h1 
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+              className="text-6xl md:text-[8rem] font-serif italic text-white/90 leading-[0.85] tracking-tight mix-blend-difference ml-12 md:ml-32"
+            >
+              {slides[currentSlide].subtitle}
+            </motion.h1>
+          </div>
           
           <motion.p 
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
-            transition={{ delay: 0.8 }}
-            className="text-lg md:text-2xl text-foreground mb-16 font-light max-w-3xl mx-auto leading-relaxed tracking-wide"
+            animate={{ opacity: 0.8 }}
+            transition={{ delay: 0.8, duration: 1 }}
+            className="text-lg md:text-xl text-white font-light max-w-xl text-center leading-relaxed tracking-widest uppercase text-[10px] md:text-xs mb-16 mix-blend-difference"
           >
-            {current.desc}
+            {slides[currentSlide].desc}
           </motion.p>
           
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="flex flex-col md:flex-row items-center justify-center gap-10"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            className="flex flex-col sm:flex-row gap-6"
           >
             <Link 
               href="/shop" 
-              className="group relative inline-flex items-center justify-center bg-primary text-primary-foreground px-16 py-10 text-xs uppercase tracking-[0.4em] transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(0,0,0,0.3)] font-black overflow-hidden"
+              className="group relative overflow-hidden bg-white text-black px-12 py-5 text-[10px] md:text-xs uppercase tracking-[0.4em] font-black transition-transform hover:scale-105"
             >
-              <span className="relative z-10">Discover Collection</span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-            </Link>
-            <Link 
-              href="/collections" 
-              className="group inline-flex items-center justify-center border border-foreground/20 text-foreground hover:border-foreground px-16 py-10 text-xs uppercase tracking-[0.4em] transition-all font-bold backdrop-blur-sm"
-            >
-              The Archives
+              <span className="relative z-10 flex items-center gap-2">
+                Shop Collection
+                <motion.span 
+                  className="inline-block"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                >→</motion.span>
+              </span>
+              <div className="absolute inset-0 bg-neutral-200 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.16,1,0.3,1]" />
             </Link>
           </motion.div>
         </motion.div>
@@ -108,13 +127,28 @@ const Hero = () => {
 
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6 mix-blend-difference text-white"
       >
-        <span className="text-[8px] uppercase tracking-[0.5em]">Scroll Down</span>
-        <div className="w-[1px] h-16 bg-gradient-to-b from-foreground to-transparent" />
+        <span className="text-[9px] uppercase tracking-[0.6em] font-bold">Discover</span>
+        <motion.div 
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" 
+        />
       </motion.div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-12 right-12 hidden md:flex gap-4 mix-blend-difference z-20">
+        {slides.map((_, i) => (
+          <button 
+            key={i} 
+            onClick={() => setCurrentSlide(i)}
+            className={`h-[1px] transition-all duration-500 ${i === currentSlide ? 'w-12 bg-white' : 'w-6 bg-white/30 hover:bg-white/60'}`}
+          />
+        ))}
+      </div>
     </section>
   );
 };
