@@ -24,6 +24,7 @@ class Product(Base):
     stock = Column(Integer)
     category_id = Column(Integer, ForeignKey("categories.id"))
     image_url = Column(String)
+    tag = Column(String, nullable=True)
     is_featured = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     

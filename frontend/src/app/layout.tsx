@@ -26,6 +26,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 import SmoothScroll from "@/components/SmoothScroll";
+import Preloader from "@/components/Preloader";
 
 export default function RootLayout({
   children,
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased cursor-none`}
       >
         <ThemeProvider>
+          <Preloader />
           <CustomCursor />
           <SmoothScroll>
             <PageTransition>

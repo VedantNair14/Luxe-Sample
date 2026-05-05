@@ -4,34 +4,37 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface SplitTextProps {
-  text: string;
+  children?: string;
+  text?: string;
   className?: string;
   delay?: number;
   stagger?: number;
 }
 
-const SplitText: React.FC<SplitTextProps> = ({ text, className = "", delay = 0, stagger = 0.05 }) => {
-  const characters = text.split('');
+const SplitText = ({ children, text, className, delay = 0, stagger = 0.05 }: SplitTextProps) => {
+  const content = text || children || "";
+  const words = content.split(" ");
 
   return (
-    <span className={`inline-block overflow-hidden ${className}`}>
-      {characters.map((char, index) => (
-        <motion.span
-          key={`${char}-${index}`}
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          exit={{ y: "-100%" }}
-          transition={{
-            duration: 1,
-            ease: [0.16, 1, 0.3, 1],
-            delay: delay + index * stagger,
-          }}
-          className="inline-block"
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </motion.span>
+    <div className={`overflow-hidden flex flex-wrap ${className}`}>
+      {words.map((word, i) => (
+        <div key={i} className="overflow-hidden mr-[0.2em] py-[0.1em]">
+          <motion.span
+            initial={{ y: "100%" }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true }}
+            transition={{ 
+              duration: 1, 
+              delay: delay + (i * stagger), 
+              ease: [0.16, 1, 0.3, 1] 
+            }}
+            className="inline-block"
+          >
+            {word}
+          </motion.span>
+        </div>
       ))}
-    </span>
+    </div>
   );
 };
 

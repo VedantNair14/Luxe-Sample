@@ -40,7 +40,8 @@ def get_products(category: Optional[str] = None, featured: Optional[bool] = None
             "price": p.price,
             "image_url": p.image_url,
             "category": p.category.name if p.category else None,
-            "is_featured": p.is_featured
+            "is_featured": p.is_featured,
+            "tag": p.tag
         } for p in products
     ]
 
@@ -57,7 +58,8 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
         "image_url": product.image_url,
         "category": product.category.name if product.category else None,
         "images": [img.url for img in product.images],
-        "stock": product.stock
+        "stock": product.stock,
+        "tag": product.tag
     }
 
 # Categories
