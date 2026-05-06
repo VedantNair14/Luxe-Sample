@@ -8,6 +8,7 @@ export interface Product {
   is_featured: boolean;
   images?: string[];
   stock?: number;
+  tag?: string;
 }
 
 export interface MappedProduct extends Product {
