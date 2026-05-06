@@ -289,8 +289,8 @@ const ShopPage = () => {
                   animate={{ opacity: 1 }}
                   className="py-48 text-center border border-dashed border-border/40 flex flex-col items-center gap-6"
                 >
-                  <p className="opacity-15 uppercase tracking-[0.8em] text-xs font-black">
-                    No silhouettes found
+                  <p className="opacity-15 uppercase tracking-[0.8em] text-[10px] font-black max-w-sm">
+                    No silhouettes discovered in this spectrum
                   </p>
                   <button
                     onClick={() => { setSearchQuery(''); setActiveCategory('All'); }}

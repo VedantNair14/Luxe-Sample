@@ -66,6 +66,14 @@ const MOCK_PRODUCTS: Product[] = [
 ];
 
 export async function fetchProducts(category?: string, featured?: boolean): Promise<Product[]> {
+  const getFilteredMockData = () => {
+    return MOCK_PRODUCTS.filter(p => {
+      if (category && category !== 'All' && p.category !== category) return false;
+      if (featured !== undefined && p.is_featured !== featured) return false;
+      return true;
+    });
+  };
+
   try {
     const url = new URL(`${API_BASE_URL}/products`);
     if (category && category !== 'All') {
@@ -74,17 +82,16 @@ export async function fetchProducts(category?: string, featured?: boolean): Prom
     if (featured !== undefined) {
       url.searchParams.append('featured', featured.toString());
     }
+    
     const response = await fetch(url.toString());
     if (!response.ok) throw new Error();
     const data = await response.json();
-    return data.length > 0 ? data : MOCK_PRODUCTS;
+    
+    // If backend returns empty list, fallback to filtered mock data
+    return (Array.isArray(data) && data.length > 0) ? data : getFilteredMockData();
   } catch (error) {
-    console.warn("Backend unavailable, using premium mock data.");
-    return MOCK_PRODUCTS.filter(p => {
-      if (category && category !== 'All' && p.category !== category) return false;
-      if (featured !== undefined && p.is_featured !== featured) return false;
-      return true;
-    });
+    console.warn("Backend unavailable, using premium mock data fallback.");
+    return getFilteredMockData();
   }
 }
 
