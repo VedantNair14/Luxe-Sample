@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeContext";
+import CustomCursor from "@/components/CustomCursor";
+import PageTransition from "@/components/PageTransition";
+import SmoothScroll from "@/components/SmoothScroll";
+import Preloader from "@/components/Preloader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,12 +26,6 @@ export const metadata: Metadata = {
   title: "LUXE | Premium Clothing & Minimal Luxury",
   description: "Experience the pinnacle of fashion with Luxe. Curated collections for the modern individual.",
 };
-
-import { ThemeProvider } from "@/context/ThemeContext";
-import CustomCursor from "@/components/CustomCursor";
-import PageTransition from "@/components/PageTransition";
-import SmoothScroll from "@/components/SmoothScroll";
-import Preloader from "@/components/Preloader";
 
 export default function RootLayout({
   children,

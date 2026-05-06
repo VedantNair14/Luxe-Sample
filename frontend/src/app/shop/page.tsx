@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import { Search, LayoutGrid, LayoutList, SlidersHorizontal, ChevronDown } from 'lucide-react';

@@ -4,7 +4,7 @@ import React, { useState, useEffect, use } from 'react';
 import Navbar from '@/components/Navbar';
 import { useCartStore, useFavoritesStore } from '@/lib/store';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingBag, Heart, ArrowLeft, Star, Shield, Truck, RefreshCw, Minus, Plus, ZoomIn } from 'lucide-react';
+import { Heart, ArrowLeft, Star, Shield, Truck, RefreshCw, Minus, Plus, ZoomIn } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
@@ -195,6 +195,7 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
                     src={img}
                     alt={`${product.name} view ${idx + 1}`}
                     fill
+                    sizes="(max-width: 768px) 20vw, 10vw"
                     className="object-cover"
                   />
                 </button>
@@ -383,7 +384,7 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
       >
         <div className="flex items-center gap-5">
           <div className="relative w-12 h-16 bg-accent/5 overflow-hidden flex-shrink-0">
-            <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+            <Image src={product.images[0]} alt={product.name} fill sizes="48px" className="object-cover" />
           </div>
           <div>
             <h4 className="text-sm font-black uppercase tracking-tight">{product.name}</h4>

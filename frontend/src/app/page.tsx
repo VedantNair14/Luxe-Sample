@@ -205,6 +205,7 @@ export default function Home() {
                   src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2500"
                   alt="Brand Story"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover transition-transform duration-[2s] group-hover:scale-[1.04]"
                   quality={90}
                 />
